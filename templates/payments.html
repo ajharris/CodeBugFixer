@@ -20,11 +20,7 @@
                             <p>This plan will give you unlimited access to the code explanation and fixing services every month. You will be charged $5 every month.</p>
                         </div>
                         <footer class="card_footer">
-                            <form action="/charge" method="post">
-                                <input type="hidden" name="plan" value="monthly">
-                                <input type="hidden" name="amount" value="500">
-                                <button class="button is-primary stripe-button" id="monthly-plan-btn">Pay $5</button>
-                            </form>
+                            <button class="button is-primary stripe-button" id="monthly-plan-btn">Pay $5</button>
                         </footer>
                     </div>
                 </div>
@@ -37,11 +33,7 @@
                             <p>This plan will give you unlimited access to the code explanation and fixing services every quarter. You will be charged $12 every quarter.</p>
                         </div>
                         <footer class="card_footer">
-                            <form action="/charge" method="post">
-                                <input type="hidden" name="plan" value="quarterly">
-                                <input type="hidden" name="amount" value="1200">
-                                <button class="button is-primary stripe-button" id="quarterly-plan-btn">Pay $12</button>
-                            </form>
+                            <button class="button is-primary stripe-button" id="quarterly-plan-btn">Pay $12</button>
                         </footer>
                     </div>
                 </div>
@@ -54,11 +46,7 @@
                             <p>This plan will give you unlimited access to the code explanation and fixing services every year. You will be charged $50 every year.</p>
                         </div>
                         <footer class="card_footer">
-                            <form action="/charge" method="post">
-                                <input type="hidden" name="plan" value="yearly">
-                                <input type="hidden" name="amount" value="5000">
-                                <button class="button is-primary stripe-button" id="annual-plan-btn">Pay $50</button>
-                            </form>
+                            <button class="button is-primary stripe-button" id="annual-plan-btn">Pay $50</button>
                         </footer>
                     </div>
                 </div>
@@ -73,7 +61,6 @@
         var quarterlyBtn = document.getElementById('quarterly-plan-btn');
         var annualBtn = document.getElementById('annual-plan-btn');
 
-        // Function to create a checkout session and redirect to Stripe Checkout
         function createCheckoutSession(plan, amount) {
             fetch('/create-checkout-session', {
                 method: 'POST',
@@ -85,8 +72,8 @@
             .then(function (response) {
                 return response.json();
             })
-            .then(function (sessionId) {
-                return stripe.redirectToCheckout({ sessionId: sessionId });
+            .then(function (data) {
+                return stripe.redirectToCheckout({ sessionId: data.id });
             })
             .then(function (result) {
                 if (result.error) {
@@ -98,20 +85,19 @@
             });
         }
 
-        // Set up click event listeners for each button
         monthlyBtn.addEventListener('click', function(event) {
             event.preventDefault();
-            createCheckoutSession('monthly', 500); // Monthly plan, $5
+            createCheckoutSession('monthly', 500);
         });
 
         quarterlyBtn.addEventListener('click', function(event) {
             event.preventDefault();
-            createCheckoutSession('quarterly', 1200); // Quarterly plan, $12
+            createCheckoutSession('quarterly', 1200);
         });
 
         annualBtn.addEventListener('click', function(event) {
             event.preventDefault();
-            createCheckoutSession('yearly', 5000); // Yearly plan, $50
+            createCheckoutSession('yearly', 5000);
         });
     </script>
 </body>
